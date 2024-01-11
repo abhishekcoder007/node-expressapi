@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 var regrouter=require("./routes/registration/teachers.js");
 // var teach=require("./routes/teachers.js");
 var loginrouter=require("./routes/login/teacherstudentlogin.js");
+
 require("./db/connectionserver.js")
 var app=express();
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.json());
  app.use("/regis",regrouter.router)
  app.use("/login",loginrouter.router)
 // connectiondb();
+app.set("name","abhi")
 app.get("/",(req,res)=>{
     res.send("hello world");
 })

@@ -15,21 +15,25 @@ var jwt=require("jsonwebtoken");
      }
  };
 
+ //to verify the student through token (authenticate)
+
  const studentVerify=(req,res,next)=>{
+
 try{
+  
   let jwtSecretKey = process.env.JWT_SECRET_STUDENT_KEY;
   let tokenHeaderKey = process.env.TOKEN_HEADER_STUDENT_KEY ;
 
   let token=req.header(tokenHeaderKey);
   const result=jwt.verify(token,jwtSecretKey);
+  console.log({"resname":result})
   if(result){
     req.studProfileData=result
     next();
-  }else{
-    res.send("only student can use this url")
-   }
+  }
+  
   }catch(err){
-    res.send(err)
+    res.send({"errname":err})
   }
  }
 

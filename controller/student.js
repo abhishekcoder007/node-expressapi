@@ -52,7 +52,12 @@ const profileStudent=(req,res)=>{
 }      
 const profileUpdateStudent=(req,res)=>{
     let data=req.studProfileData;
-    if(req.body&&data){
+    let changeName=req.body.name
+    let changeUsername=req.body.username
+    let changePassword=req.body.password
+    let changeClass = req.body.class;
+    let changeRoll=req.body.roll
+    if(!changeClass&&!changeRoll&&data&&((changeName&&changeName!="")||(changeUsername&&changeUsername!="")||(changePassword&&changePassword!=""))){
     let sql= "UPDATE students SET ? WHERE username=? AND password=?";
     con.query(sql,[req.body,data.userId,data.password],(err,result)=>{
       if(err){
@@ -62,7 +67,7 @@ const profileUpdateStudent=(req,res)=>{
       }
     })
 }else{
-    res.send("pls check update data")
+    res.send("pls check update data && data should not empty && you can't update roll ans class")
 }
 }
 
@@ -78,9 +83,43 @@ const updateStudent=(req,res)=>{
         })
   
       };
+      const updateStudentMarks=(req,res)=>{
+        const id=req.params.id
+        let sql= "UPDATE student_marks SET ? WHERE stu_id=?";
+            con.query(sql,[req.body,id],(err,result)=>{
+              if(err){
+                res.send({"error":err});
+              }else{
+                if(result.affectedRows==0){
+                  res.send("Roll number not found");
+                  return
+                }else{
+                  res.send({"result":result});
+                }
+                // res.send({"result":result});
+              }
+            })
+      
+          };
+
+          const studentDetails=(req,res)=>{
+            let data=req.studProfileData;
+            console.log({"reqdata":data});
+            if(data){
+              let sql = "SELECT students.name, students.class, student_marks.math, student_marks.physics, student_marks.chemistry FROM students INNER JOIN student_marks ON students.roll = student_marks.stu_id WHERE students.username=? AND students.password=?";
+         
+            con.query(sql,[data.userId,data.password],(err,result)=>{
+              if(err){
+                res.send(err);
+              }else{
+                res.send(result);
+              }
+            })
+        }else{
+            res.send("first login then check your profile and data")
+        }
+        }
 
 
 
-
-
-      module.exports={updateStudent,studentLogin,profileStudent,profileUpdateStudent};
+      module.exports={updateStudent,studentLogin,profileStudent,profileUpdateStudent,updateStudentMarks,studentDetails};

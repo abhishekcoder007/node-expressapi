@@ -15,6 +15,20 @@ var jwt=require("jsonwebtoken");
      }
  };
 
+ const principalVerify=(req,res,next)=>{
+  let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
+    let jwtSecretKey = process.env.JWT_SECRET_KEY;
+    let token=req.header(tokenHeaderKey);
+    const result=jwt.verify(token,jwtSecretKey);
+      console.log(result);
+    if(result.user_type=="principal"){
+
+     next();
+   }else{
+     res.send("only teacher can use this url")
+    }
+};
+
  //to verify the student through token (authenticate)
 
  const studentVerify=(req,res,next)=>{
@@ -38,4 +52,4 @@ try{
  }
 
 
- module.exports={teacherVerify,studentVerify};
+ module.exports={teacherVerify,studentVerify,principalVerify};

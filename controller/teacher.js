@@ -23,10 +23,10 @@ const teacherLogin = async (req, res) => {
           let data = {
             userId: username,
             password: password,
-            user_type:"teacher"
+            user_type: "teacher",
           };
           const token = jwt.sign(data, jwtsecretkey);
-               console.log(token); 
+          console.log(token);
           res.send(token);
         } else {
           res.send("user password not match");
